@@ -64,6 +64,47 @@ struct Day02: AdventDay {
     
     // Replace this with your solution for the second part of the day's challenge.
     func part2() -> Any {
-        return false
+        var sumOfPowers = 0
+        for game in entities {
+            print("game = \(game)")
+            if let startIndex = game.range(of: "Game "), let endIndex = game.range(of: ": ") {
+                let gameNumber = Int(game[startIndex.upperBound..<endIndex.lowerBound])!
+                
+                var remainString = game[endIndex.upperBound...]
+                let scanner = Scanner(string: String(remainString))
+                scanner.charactersToBeSkipped = CharacterSet(arrayLiteral: ";", " ", ",")
+                
+                var maxRed = -1
+                var maxBlue = -1
+                var maxGreen = -1
+                
+                while !scanner.isAtEnd {
+                    if let number = scanner.scanInt() {
+                        print("number = \(number)")
+                        if let red = scanner.scanString("red") {
+                            print("red")
+                            maxRed = max(number, maxRed)
+                            continue
+                        }
+                        if let blue = scanner.scanString("blue") {
+                            print("blue")
+                            maxBlue = max(number, maxBlue)
+                            continue
+                        }
+                        if let green = scanner.scanString("green") {
+                            print("green")
+                            maxGreen = max(number, maxGreen)
+                            continue
+                        }
+                    } else {
+                        break
+                    }
+                }
+                if maxRed > 0 && maxBlue > 0 && maxGreen > 0 {
+                    sumOfPowers += (maxRed * maxBlue * maxGreen)
+                }
+            }
+        }
+        return sumOfPowers
     }
 }
